@@ -33,7 +33,7 @@ namespace BrainMelt
 
         static void Main(string[] args)
         {
-            Vidja.Vidja.Generate(new BrainMelt());
+            Vidja.Vidja.Generate(new BrainMelt(), "BrainMelt.gif");
         }
         
         
@@ -126,7 +126,7 @@ namespace BrainMelt
             return new Point { X = p.X + x, Y = p.Y + y };
         }
 
-        static void spiral(Graphics g, params Point[] points)
+        private void spiral(Graphics g, params Point[] points)
         {
             List<Point> foo = new List<Point>(points);
 
@@ -146,14 +146,22 @@ namespace BrainMelt
 
         }
 
-        private static Point MakeNewPoint(PointF thisPoint, PointF thatPoint)
+        private Point MakeNewPoint(PointF thisPoint, PointF thatPoint)
         {
-            var d = 0.2f;
+            var d = getD();
             return new Point
             {
                 X = ((1 - d) * thisPoint.X + d * thatPoint.X),
                 Y = ((1 - d) * thisPoint.Y + d * thatPoint.Y)
             };
+        }
+
+        private float getD()
+        {
+            if (_durationProportion < 0.5)
+                return (float)(0.0 + 0.3 * _durationProportion / 0.5);
+
+            return (float)(0.3 - 0.3*((_durationProportion - 0.5)/0.5));
         }
 
         private static PointF MakePointF(Point point)
